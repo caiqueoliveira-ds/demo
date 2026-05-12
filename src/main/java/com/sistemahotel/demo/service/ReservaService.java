@@ -24,14 +24,14 @@ public class ReservaService {
     public ReservaDTO criarReserva(ReservaDTO dto) {
 
         Quarto quarto = quartoRepository.findById(dto.getQuartoId())
-                .orElseThrow(() -> new BusinessException("Quarto não encontrado"));
+                .orElseThrow(() -> new Exception("Quarto não encontrado"));
 
         Hospede hospede = hospedeRepository.findById(dto.getHospedeId())
-                .orElseThrow(() -> new BusinessException("Hóspede não encontrado"));
+                .orElseThrow(() -> new Exception("Hóspede não encontrado"));
 
         if (!dto.getDataEntrada().isBefore(dto.getDataSaida())) {
 
-            throw new BusinessException("Data de entrada deve ser anterior à data de saída");
+            throw new Exception("Data de entrada deve ser anterior à data de saída");
 
         }
 
@@ -39,7 +39,7 @@ public class ReservaService {
 
         if (!sobrepostas.isEmpty()) {
 
-            throw new BusinessException("Quarto já possui reserva para o período solicitado");
+            throw new Exception("Quarto já possui reserva para o período solicitado");
 
         }
 
@@ -48,7 +48,7 @@ public class ReservaService {
 
         if (ativas >= 2) {
 
-            throw new BusinessException("Hóspede já possui 2 reservas ativas");
+            throw new Exception("Hóspede já possui 2 reservas ativas");
 
         }
 
@@ -68,11 +68,11 @@ public class ReservaService {
     public void cancelarReserva(ReservaDTO dto) {
 
         Reserva reserva = reservaRepository.findById(dto.getId())
-                .orElseThrow(() -> new BusinessException("Reserva não encontrada"));
+                .orElseThrow(() -> new Exception("Reserva não encontrada"));
 
         if (reserva.getStatus() != ReservaStatus.ATIVA) {
 
-            throw new BusinessException("Apenas reservas ativas podem ser canceladas");
+            throw new Exception("Apenas reservas ativas podem ser canceladas");
 
         }
 
@@ -80,7 +80,7 @@ public class ReservaService {
 
         if (cancelamento == null) {
 
-            throw new BusinessException("Data de cancelamento é obrigatória");
+            throw new Exception("Data de cancelamento é obrigatória");
 
         }
 
@@ -89,7 +89,7 @@ public class ReservaService {
 
         if (horasAntecedencia < 24) {
 
-            throw new BusinessException("Cancelamento deve ser feito com pelo menos 24h de antecedência");
+            throw new Exception("Cancelamento deve ser feito com pelo menos 24h de antecedência");
 
         }
 
@@ -103,11 +103,11 @@ public class ReservaService {
     public void realizarCheckIn(ReservaDTO dto) {
 
         Reserva reserva = reservaRepository.findById(dto.getId())
-                .orElseThrow(() -> new BusinessException("Reserva não encontrada"));
+                .orElseThrow(() -> new Exception("Reserva não encontrada"));
 
         if (reserva.getStatus() != ReservaStatus.ATIVA) {
 
-            throw new BusinessException("Apenas reservas ativas podem fazer check-in");
+            throw new Exception("Apenas reservas ativas podem fazer check-in");
 
         }
 
@@ -115,7 +115,7 @@ public class ReservaService {
 
         if (operacao == null || !operacao.equals(reserva.getDataEntrada())) {
 
-            throw new BusinessException("Check-in permitido apenas na data de entrada da reserva");
+            throw new Exception("Check-in permitido apenas na data de entrada da reserva");
 
         }
 
@@ -128,11 +128,11 @@ public class ReservaService {
     public void realizarCheckOut(ReservaDTO dto) {
 
         Reserva reserva = reservaRepository.findById(dto.getId())
-                .orElseThrow(() -> new BusinessException("Reserva não encontrada"));
+                .orElseThrow(() -> new Exception("Reserva não encontrada"));
 
         if (reserva.getStatus() != ReservaStatus.CHECKED_IN) {
 
-            throw new BusinessException("Apenas reservas com check-in realizado podem fazer check-out");
+            throw new Exception("Apenas reservas com check-in realizado podem fazer check-out");
 
         }
 
@@ -172,6 +172,6 @@ public class ReservaService {
         dto.setDataSaida(reserva.getDataSaida());
         dto.setStatus(reserva.getStatus().toString());
         return dto;
-        
+
     }
 }

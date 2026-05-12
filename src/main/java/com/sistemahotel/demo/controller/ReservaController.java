@@ -56,7 +56,7 @@ public class ReservaController {
 
     }
     
-    @GetMapping("/quartos-disponiveis")
+    /*@GetMapping("/quartos-disponiveis")
     public List<Quarto> listarQuartosDisponiveis(
 
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
@@ -64,5 +64,5 @@ public class ReservaController {
 
         return reservaService.listarQuartosDisponiveis(dataInicio, dataFim);
 
-    }
+    }*/
 }
