@@ -1,11 +1,16 @@
 package com.sistemahotel.demo;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import com.sistemahotel.demo.dto.HospedeDTO;
 import com.sistemahotel.demo.service.HospedeService;
 
 public class Main {
+
+    // Lista em memória para quartos (simples, sem Spring/JPA)
+    static List<String> quartosCadastrados = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -32,27 +37,76 @@ public class Main {
 
                 case 1:
 
-                    System.out.print("Nome: ");
-                    String nome = sc.nextLine();
+                    // Submenu de cadastro
+                    System.out.println("\n--- CADASTRAR ---");
+                    System.out.println("1 - Hóspede");
+                    System.out.println("2 - Quarto");
+                    System.out.println("0 - Voltar");
+                    System.out.print("Escolha: ");
 
-                    System.out.print("CPF: ");
-                    String cpf = sc.nextLine();
+                    int tipoCadastro = sc.nextInt();
+                    sc.nextLine();
 
-                    System.out.print("Telefone: ");
-                    String telefone = sc.nextLine();
+                    if (tipoCadastro == 1) {
 
-                    System.out.print("Email: ");
-                    String email = sc.nextLine();
+                        // Cadastrar Hóspede
+                        System.out.println("\n-- Cadastro de Hóspede --");
 
-                    HospedeDTO dto = new HospedeDTO(nome, cpf, telefone, email);
+                        System.out.print("Nome: ");
+                        String nome = sc.nextLine();
 
-                    service.cadastrarHospede(dto);
+                        System.out.print("CPF: ");
+                        String cpf = sc.nextLine();
+
+                        System.out.print("Telefone: ");
+                        String telefone = sc.nextLine();
+
+                        System.out.print("Email: ");
+                        String email = sc.nextLine();
+
+                        HospedeDTO dto = new HospedeDTO(nome, cpf, telefone, email);
+                        service.cadastrarHospede(dto);
+
+                    } else if (tipoCadastro == 2) {
+
+                        // Cadastrar Quarto
+                        System.out.println("\n-- Cadastro de Quarto --");
+
+                        System.out.print("Número do quarto: ");
+                        int numero = sc.nextInt();
+                        sc.nextLine();
+
+                        System.out.print("Tipo (ex: Standard, Luxo, Suite): ");
+                        String tipo = sc.nextLine();
+
+                        System.out.print("Preço (ex: 150.00): ");
+                        double preco = sc.nextDouble();
+                        sc.nextLine();
+
+                        String quarto = String.format("Quarto #%d | Tipo: %s | Preço: R$ %.2f", numero, tipo, preco);
+                        quartosCadastrados.add(quarto);
+
+                        System.out.println("\nQuarto cadastrado com sucesso!");
+
+                    } else if (tipoCadastro == 0) {
+                        System.out.println("Voltando ao menu principal...");
+                    } else {
+                        System.out.println("Opção inválida.");
+                    }
 
                     break;
 
                 case 2:
 
                     service.listarHospedes();
+
+                    if (!quartosCadastrados.isEmpty()) {
+                        System.out.println("\n--- Quartos Cadastrados ---");
+                        for (String q : quartosCadastrados) {
+                            System.out.println(q);
+                            System.out.println("----------------------");
+                        }
+                    }
 
                     break;
 
